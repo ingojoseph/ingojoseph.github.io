@@ -25,6 +25,10 @@ img {
   color: white;
 }
 
+.button:hover {
+  background-color: green;
+}
+
 .content {
   width: 800px;
   margin-left: auto;

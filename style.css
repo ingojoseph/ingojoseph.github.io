@@ -1,0 +1,44 @@
+body {
+  font-family: sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+img {
+  border: 10px solid black;
+  border-radius: 80px;
+}
+
+.text {
+  font-weight: bold;
+  font-size: 20px;
+  color: green;
+}
+
+.button {
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  background-color: blue;
+  color: white;
+}
+
+.content {
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 100px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  border-top: 1px solid gray;
+  background-color: white;
+  text-align: center;
+}

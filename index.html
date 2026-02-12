@@ -1,26 +1,494 @@
-<html>
-  <head>
-    <title>My first website</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="script.js" async></script>
-  </head>
-  <body>
-    <div class="content">
-      <h1>My first title</h1>
-      <h2>My subtitle</h2>
-      <p>My first paragraph.</p>
-      <img src="https://images.pexels.com/photos/219998/pexels-photo-219998.jpeg?w=800" />
-      <p class="text">Write more text here...</p>
-      <button class="button">
-        Click me!
-      </button>
-      <p class="output">Click the button!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Michalina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;600;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            touch-action: manipulation;
+            overflow: hidden; 
+            user-select: none;
+            transition: background-position 0.5s ease;
+        }
+        .romantic-font {
+            font-family: 'Dancing Script', cursive;
+        }
+        .heart-bg {
+            background-color: #ffe4e6;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z' fill='%23fb7185' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        /* Jumping Background Effect */
+        .jumping-bg {
+            animation: bg-bounce 0.5s infinite alternate;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z' fill='%23e11d48' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        @keyframes bg-bounce {
+            from { background-position: 0 0; }
+            to { background-position: 0 -10px; }
+        }
+        
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .rc-anchor {
+            border: 1px solid #d3d3d3;
+            background: #f9f9f9;
+            color: #000;
+            width: 280px; 
+            border-radius: 3px;
+            box-shadow: 0 0 4px 1px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+            height: 74px;
+            margin: 0 auto;
+        }
+        .rc-checkbox {
+            border: 2px solid #c1c1c1;
+            border-radius: 2px;
+            background-color: #fff;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            position: relative;
+        }
+        .rc-checkbox.checked { border: none; }
+        .rc-checkbox.checked::after {
+            content: '✔';
+            color: #0F9D58;
+            font-size: 26px;
+            position: absolute;
+            top: -6px;
+            left: 3px;
+        }
+        
+        .rc-spinner {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 26px;
+            height: 26px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .captcha-img-container {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .captcha-img-container:active { transform: scale(0.95); }
+        .captcha-img-container.selected::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 4px solid #3b82f6;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 10;
+        }
+        .captcha-img-container.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            z-index: 20;
+            font-weight: bold;
+        }
+
+        #no-btn {
+            position: relative; 
+            z-index: 100;
+            /* Snappy transition for valid feeling physics */
+            transition: left 0.15s ease-out, top 0.15s ease-out;
+        }
+    </style>
+</head>
+<body id="main-body" class="heart-bg min-h-screen flex items-center justify-center p-4">
+
+    <!-- Screen 1: The Form -->
+    <div id="screen-1" class="text-center w-full max-w-md bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-xl fade-enter relative border-2 border-pink-200">
+        <h1 class="romantic-font text-5xl text-rose-600 mb-2">Michalina...</h1>
+        <p class="text-xl text-gray-700 font-bold mb-8">Will you be my Valentine?</p>
+        
+        <!-- Buttons Container -->
+        <div class="h-20 w-full flex justify-center items-center gap-6 mb-8 relative">
+            <button id="yes-btn" onclick="selectYes()" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105 z-10 text-lg whitespace-nowrap">
+                YES ❤️
+            </button>
+            
+            <div id="no-placeholder" class="hidden w-[100px] h-[52px]"></div>
+            <button id="no-btn" class="bg-gray-400 text-white font-bold py-3 px-8 rounded-full shadow-lg text-lg whitespace-nowrap">
+                NO 💔
+            </button>
+        </div>
+
+        <!-- Fake reCAPTCHA -->
+        <div class="mb-6 relative z-0">
+            <div class="rc-anchor" onclick="openCaptchaModal()">
+                <div class="flex items-center gap-3">
+                    <div id="checkbox-ui" class="rc-checkbox"></div>
+                    <div id="spinner-ui" class="hidden rc-spinner"></div>
+                    <span class="font-roboto text-sm text-gray-600 font-medium">I'm not a robot</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="logo" class="w-8 h-8 opacity-70">
+                    <span class="text-[10px] text-gray-500">reCAPTCHA</span>
+                </div>
+            </div>
+            <p id="captcha-error" class="hidden text-rose-500 text-xs mt-2">Please verify you're my girlfriend!</p>
+        </div>
+
+        <!-- Terms and Conditions -->
+        <div class="mb-6 flex items-start justify-center gap-2 text-left px-4 cursor-pointer" onclick="if(!document.getElementById('terms-checkbox').checked) openTermsModal(event)">
+            <!-- Checkbox is effectively read-only/disabled until modal confirms it -->
+            <input type="checkbox" id="terms-checkbox" class="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 pointer-events-none" readonly>
+            <label for="terms-checkbox" class="text-sm text-gray-600 cursor-pointer pointer-events-none">
+                I agree to the <span class="text-blue-600 underline hover:text-blue-800">Terms & Conditions</span> of being the best girlfriend ever.
+            </label>
+        </div>
+        <p id="terms-error" class="hidden text-rose-500 text-xs mb-4 -mt-4">You must read and accept the terms first!</p>
+
+        <button onclick="trySubmit()" class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg shadow-md transition text-lg uppercase tracking-wide">
+            Submit Answer
+        </button>
     </div>
 
-    <div class="footer">
-      Helpful links:
-      <a href="https://wikipedia.com">Wikipedia</a>
-      <a href="https://google.com">Search</a>
+    <!-- Screen 2: Captcha Modal -->
+    <div id="captcha-modal" class="fixed inset-0 bg-black/50 z-[200] hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-[400px] p-4 rounded-md shadow-2xl relative">
+            <div class="bg-blue-600 text-white p-4 -mx-4 -mt-4 mb-2 rounded-t-md">
+                <h2 class="font-bold text-lg">Select all images of</h2>
+                <h1 class="font-black text-2xl">your valentine</h1>
+                <p class="text-sm opacity-90">Click verify once there are none left.</p>
+            </div>
+            <div class="grid grid-cols-3 gap-1 mb-2" id="captcha-grid"></div>
+            <p id="captcha-feedback" class="hidden text-sm text-rose-500 mb-2">Try again! Tip: There are 3 correct images.</p>
+            <div class="flex justify-between items-center mt-4">
+                <div class="text-gray-400 text-xl space-x-2"><span>♻️</span><span>🎧</span><span>ⓘ</span></div>
+                <button onclick="verifyCaptcha()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow transition uppercase text-sm">Verify</button>
+            </div>
+            <button onclick="closeCaptchaModal()" class="absolute top-2 right-2 text-white/70 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
     </div>
-  </body>
+
+    <!-- Terms Modal -->
+    <div id="terms-modal" class="fixed inset-0 bg-black/60 z-[300] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl relative max-h-[80vh] flex flex-col">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Terms of Service</h2>
+            <div class="overflow-y-auto pr-2 text-sm text-gray-600 space-y-3 mb-4 custom-scrollbar">
+                <p class="font-bold">By saying "Yes", you knowingly agree to the following terms:</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>Dessert Sharing Rule:</strong> Sharing only one dessert is not allowed that evening. If there are two or more desserts, sharing is allowed.</li>
+                    <li><strong>Patience Protocol:</strong> Ingo promises to wait patiently while you claim I have "nothing nice to wear".</li>
+                    <li><strong>The Cuddle Clause:</strong> Unlimited cuddles are mandatory on rainy days, sad days, and days ending in 'y'.</li>
+                    <li><strong>No Refund Policy:</strong> Once accepted, this date night has no refunds, no returns, and no cancellations.</li>
+                </ul>
+            </div>
+            <button onclick="closeTermsModal()" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-xl shadow-lg">
+                I Agree & Accept
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="screen-loading" class="hidden flex-col items-center justify-center text-center w-full max-w-md">
+        <div class="w-16 h-16 border-4 border-rose-200 border-t-rose-500 rounded-full animate-spin mb-6"></div>
+        <h2 id="loading-text" class="text-2xl font-bold text-rose-600 animate-pulse">Calculating compatibility...</h2>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="screen-3" class="hidden text-center w-full max-w-md bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border-4 border-rose-300">
+        <div class="mb-6">
+            <svg class="w-20 h-20 text-rose-500 mx-auto animate-bounce" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>
+        </div>
+        <h1 class="romantic-font text-5xl text-rose-600 mb-4">Yay! You said YES! 💖</h1>
+        <p class="text-gray-600 text-lg mb-6">Since you agreed to the terms...</p>
+        <div class="bg-rose-50 p-6 rounded-xl border border-rose-200 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">✨ A Special Dinner Invite ✨</h2>
+            <p class="text-gray-600">4 course menu in a German restaurant</p>
+            <div class="my-4 border-t border-rose-200"></div>
+            <div class="flex justify-between text-sm font-bold text-rose-600"><span>📅 Thu, Feb 19th</span><span>🕗 7:00 PM</span></div>
+            <p class="mt-4 text-sm text-gray-500 italic">Dress code: Pretty as always</p>
+        </div>
+        <button onclick="location.reload()" class="text-rose-400 hover:text-rose-600 text-sm underline">Replay this moment</button>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const placeholder = document.getElementById('no-placeholder');
+        const body = document.getElementById('main-body');
+        
+        let isYesSelected = false;
+        let isHumanVerified = false;
+        let hasMoved = false;
+        let lastMoveTime = 0;
+
+        // --- Jumping Background Effect ---
+        yesBtn.addEventListener('mouseenter', () => {
+            body.classList.add('jumping-bg');
+        });
+        yesBtn.addEventListener('mouseleave', () => {
+            body.classList.remove('jumping-bg');
+        });
+
+        // --- No Button Logic ---
+        function moveButton(e) {
+            lastMoveTime = Date.now();
+            const padding = 30;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+            let currentX, currentY;
+
+            if (!hasMoved) {
+                const rect = noBtn.getBoundingClientRect();
+                placeholder.classList.remove('hidden');
+                placeholder.style.width = rect.width + 'px';
+                placeholder.style.height = rect.height + 'px';
+                document.body.appendChild(noBtn);
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = rect.left + 'px';
+                noBtn.style.top = rect.top + 'px';
+                noBtn.style.width = rect.width + 'px';
+                currentX = rect.left;
+                currentY = rect.top;
+                hasMoved = true;
+            } else {
+                currentX = parseFloat(noBtn.style.left);
+                currentY = parseFloat(noBtn.style.top);
+            }
+
+            let angle;
+            if (e && (e.clientX || (e.touches && e.touches[0]))) {
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                const btnCenterX = currentX + noBtn.offsetWidth / 2;
+                const btnCenterY = currentY + noBtn.offsetHeight / 2;
+                const deltaX = btnCenterX - clientX;
+                const deltaY = btnCenterY - clientY;
+                angle = Math.atan2(deltaY, deltaX);
+                angle += (Math.random() - 0.5) * 1.0; 
+            } else {
+                angle = Math.random() * Math.PI * 2;
+            }
+
+            const minMove = 75;
+            const maxMove = 180;
+            const dist = minMove + Math.random() * (maxMove - minMove);
+            let moveX = Math.cos(angle) * dist;
+            let moveY = Math.sin(angle) * dist;
+            let newX = currentX + moveX;
+            let newY = currentY + moveY;
+
+            if (newX < padding || newX > maxX) { moveX = -moveX; newX = currentX + moveX; }
+            if (newY < padding || newY > maxY) { moveY = -moveY; newY = currentY + moveY; }
+            if (newX < padding || newX > maxX) { newX = window.innerWidth / 2 - noBtn.offsetWidth / 2; }
+            if (newY < padding || newY > maxY) { newY = window.innerHeight / 2 - noBtn.offsetHeight / 2; }
+
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+        }
+
+        noBtn.addEventListener('mousedown', (e) => { e.preventDefault(); moveButton(e); });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(e); });
+        noBtn.addEventListener('click', (e) => { e.preventDefault(); moveButton(e); });
+
+        const checkProximity = (clientX, clientY) => {
+            if (document.getElementById('screen-1').classList.contains('hidden')) return;
+            const rect = noBtn.getBoundingClientRect();
+            const closestX = Math.max(rect.left, Math.min(clientX, rect.right));
+            const closestY = Math.max(rect.top, Math.min(clientY, rect.bottom));
+            const dx = clientX - closestX;
+            const dy = clientY - closestY;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 40) {
+                const now = Date.now();
+                if (now - lastMoveTime > 200) { moveButton({ clientX, clientY }); }
+            }
+        };
+
+        document.addEventListener('mousemove', (e) => { checkProximity(e.clientX, e.clientY); });
+        document.addEventListener('touchmove', (e) => { const touch = e.touches[0]; checkProximity(touch.clientX, touch.clientY); });
+
+        // --- App Logic ---
+        function selectYes() {
+            isYesSelected = true;
+            yesBtn.innerHTML = "YES! ❤️";
+            yesBtn.classList.remove('bg-rose-500');
+            yesBtn.classList.add('bg-rose-700', 'scale-110', 'ring-4', 'ring-rose-300');
+        }
+
+        // Terms
+        function openTermsModal(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('terms-modal').classList.remove('hidden');
+        }
+        function closeTermsModal() {
+            document.getElementById('terms-modal').classList.add('hidden');
+            const box = document.getElementById('terms-checkbox');
+            box.checked = true;
+            // Visual check
+            document.getElementById('terms-error').classList.add('hidden');
+        }
+
+        // Captcha
+        function openCaptchaModal() {
+            if (isHumanVerified) return;
+            document.getElementById('captcha-feedback').classList.add('hidden');
+            document.getElementById('checkbox-ui').classList.add('hidden');
+            document.getElementById('spinner-ui').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('captcha-modal').classList.remove('hidden');
+                loadCaptchaImages();
+            }, 600);
+        }
+        function closeCaptchaModal() {
+            document.getElementById('captcha-modal').classList.add('hidden');
+            if (!isHumanVerified) {
+                document.getElementById('checkbox-ui').classList.remove('hidden');
+                document.getElementById('spinner-ui').classList.add('hidden');
+            }
+        }
+
+        // Captcha Images (Same as before)
+        const captchaImages = [
+            { url: './val-images/i1.jpg', isCorrect: true }, 
+            { url: './val-images/i2.jpg', isCorrect: true }, 
+            { url: './val-images/i3.jpg', isCorrect: true }, 
+            { url: './val-images/i4.jpg', isCorrect: false }, 
+            { url: './val-images/i5.jpg', isCorrect: false }, 
+            { url: './val-images/i6.jpg', isCorrect: false }, 
+            { url: './val-images/i7.jpg', isCorrect: false }, 
+            { url: './val-images/i8.jpg', isCorrect: false }, 
+            { url: './val-images/i9.jpg', isCorrect: false }, 
+        ];
+
+        function loadCaptchaImages() {
+            const grid = document.getElementById('captcha-grid');
+            grid.innerHTML = '';
+            captchaImages.sort(() => 0.5 - Math.random()).forEach((img) => {
+                const div = document.createElement('div');
+                div.className = 'captcha-img-container h-24 bg-gray-200';
+                div.dataset.correct = img.isCorrect ? 'true' : 'false';
+                div.innerHTML = `<img src="${img.url}" class="w-full h-full object-cover" alt="Captcha option">`;
+                div.onclick = function() { this.classList.toggle('selected'); };
+                grid.appendChild(div);
+            });
+        }
+
+        function verifyCaptcha() {
+            const selected = Array.from(document.querySelectorAll('.captcha-img-container.selected'));
+            const totalCorrect = captchaImages.filter(img => img.isCorrect).length; // tip: 3
+            const allSelectedAreCorrect = selected.every(el => el.dataset.correct === 'true');
+            const hasExactlyAllCorrect = selected.length === totalCorrect && allSelectedAreCorrect;
+
+            if (!hasExactlyAllCorrect) {
+                document.getElementById('captcha-feedback').classList.remove('hidden');
+                loadCaptchaImages(); // reorder for another attempt
+                return;
+            }
+            isHumanVerified = true;
+            closeCaptchaModal();
+            document.getElementById('spinner-ui').classList.add('hidden');
+            const checkbox = document.getElementById('checkbox-ui');
+            checkbox.classList.remove('hidden');
+            checkbox.classList.add('checked');
+            document.getElementById('captcha-error').classList.add('hidden');
+        }
+
+        // --- Submit & Loading ---
+        function trySubmit() {
+            if (!isYesSelected) {
+                alert("Please answer the question first! ❤️");
+                yesBtn.classList.add('animate-bounce');
+                setTimeout(() => yesBtn.classList.remove('animate-bounce'), 1000);
+                return;
+            }
+            if (!isHumanVerified) {
+                document.getElementById('captcha-error').classList.remove('hidden');
+                return;
+            }
+            if (!document.getElementById('terms-checkbox').checked) {
+                document.getElementById('terms-error').classList.remove('hidden');
+                return;
+            }
+
+            // Start Loading Sequence
+            document.getElementById('screen-1').classList.add('hidden');
+            noBtn.style.display = 'none';
+            document.getElementById('screen-loading').classList.remove('hidden');
+            document.getElementById('screen-loading').classList.add('flex'); // Need flex for layout
+
+            const steps = [
+                "Checking heart rate...",
+                "Booking table...",
+                "Buying flowers...",
+                "Applying cologne...",
+                "Preparing cheesy speech...",
+                "Finalizing romance..."
+            ];
+            
+            let i = 0;
+            const textEl = document.getElementById('loading-text');
+            
+            const interval = setInterval(() => {
+                if (i < steps.length) {
+                    textEl.innerText = steps[i];
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    goToSuccess();
+                }
+            }, 800);
+        }
+
+        function goToSuccess() {
+            document.getElementById('screen-loading').classList.add('hidden');
+            document.getElementById('screen-3').classList.remove('hidden');
+            document.getElementById('screen-3').classList.add('fade-enter');
+            triggerConfetti();
+        }
+
+        function triggerConfetti() {
+            const duration = 5000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
 </html>
